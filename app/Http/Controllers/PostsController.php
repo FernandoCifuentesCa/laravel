@@ -15,6 +15,8 @@ class PostsController extends Controller
     public function index()
     {
         //
+        $datos['posts']=posts::paginate(25);
+        return view('posts.index',$datos);
     }
 
     /**
@@ -25,6 +27,7 @@ class PostsController extends Controller
     public function create()
     {
         //
+        return view('posts.create');
     }
 
     /**
@@ -36,6 +39,22 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         //
+        $fields=[
+            'content'=> 'required|string|max:250'
+        ];
+        $message=["required"=>":attribute is required"];
+
+        $this->validate($request,$fields,$message);
+
+        $dataposts=request()->all();
+
+        $dataposts= request()->except('_token');
+
+        posts::insert($dataposts);
+
+        $datos['posts']=posts::paginate(25);
+        return view('posts.index',$datos);
+
     }
 
     /**
@@ -55,9 +74,12 @@ class PostsController extends Controller
      * @param  \App\posts  $posts
      * @return \Illuminate\Http\Response
      */
-    public function edit(posts $posts)
+    public function edit($id)
     {
         //
+        $post =posts::findOrFail($id);
+
+        return view('posts.edit',compact('post'));
     }
 
     /**
@@ -67,9 +89,14 @@ class PostsController extends Controller
      * @param  \App\posts  $posts
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, posts $posts)
+    public function update(Request $request, $id)
     {
         //
+        $post= request()->except('_token','_method');
+        posts::where('id','=',$id)->update($post);
+        
+        $post =posts::findOrFail($id);
+        return view('posts.edit',compact('post'));
     }
 
     /**
@@ -78,8 +105,10 @@ class PostsController extends Controller
      * @param  \App\posts  $posts
      * @return \Illuminate\Http\Response
      */
-    public function destroy(posts $posts)
+    public function destroy($id)
     {
         //
+        posts::destroy($id);
+        return redirect('posts');
     }
 }

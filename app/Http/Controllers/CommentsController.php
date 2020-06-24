@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\comments;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 
 class CommentsController extends Controller
 {
@@ -15,7 +16,11 @@ class CommentsController extends Controller
     public function index()
     {
         //
+        $datos['comments']=comments::paginate(25);
+        return view('comments.index',$datos);
+
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -25,6 +30,7 @@ class CommentsController extends Controller
     public function create()
     {
         //
+        return view('comments.create');
     }
 
     /**
@@ -36,6 +42,23 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         //
+
+        $fields=[
+            'content'=> 'required|string|max:250',
+            'posts_id'=>'required|string|max:250'
+        ];
+        $message=["required"=>":attribute is required"];
+
+        $this->validate($request,$fields,$message);
+
+        $datacomments=request()->all();
+
+        $datacomments= request()->except('_token');
+
+        comments::insert($datacomments);
+
+        $datos['comments']=comments::paginate(25);
+        return view('comments.index',$datos);
     }
 
     /**
@@ -47,6 +70,7 @@ class CommentsController extends Controller
     public function show(comments $comments)
     {
         //
+
     }
 
     /**
@@ -55,9 +79,12 @@ class CommentsController extends Controller
      * @param  \App\comments  $comments
      * @return \Illuminate\Http\Response
      */
-    public function edit(comments $comments)
+    public function edit( $id)
     {
         //
+        $comments =comments::findOrFail($id);
+
+        return view('comments.edit',compact('comments'));
     }
 
     /**
@@ -67,9 +94,14 @@ class CommentsController extends Controller
      * @param  \App\comments  $comments
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, comments $comments)
+    public function update(Request $request, $id)
     {
         //
+        $comments= request()->except('_token','_method');
+        comments::where('id','=',$id)->update($comments);
+        
+        $comments =comments::findOrFail($id);
+        return view('comments.edit',compact('comments'));
     }
 
     /**
@@ -78,8 +110,10 @@ class CommentsController extends Controller
      * @param  \App\comments  $comments
      * @return \Illuminate\Http\Response
      */
-    public function destroy(comments $comments)
+    public function destroy($id)
     {
         //
+        comments::destroy($id);
+        return redirect('comments');
     }
 }
