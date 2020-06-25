@@ -1,3 +1,10 @@
+@extends('layouts.app')
+
+
+@section('content')
+
+<div class="container">
+
 create a new comment                        
 
 @if(count($errors)>0)
@@ -24,3 +31,6 @@ create a new comment
 <input type="submit" value="Agregar">
 
 </form>
+
+</div>
+@endsection

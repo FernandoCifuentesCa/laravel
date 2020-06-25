@@ -1,7 +1,16 @@
+@extends('layouts.app')
+
+
+@section('content')
+
+<div class="container">
+
+ <a class="nav-link" href="{{ route('posts.create') }}">{{ __('Add a Post') }}</a>
+
 <table class="table table-dark">
     <thead class="thead-dark">
         <tr>
-            <th>content</th>
+            <th style="text-align: center">Posts</th>
         </tr>
     </thead>
 
@@ -10,7 +19,6 @@
     @foreach($posts as $post)
         <tr>
             <td>{{$post->content}}</td>
-            //<td>{{$post->comment}}</td>
             <th> <a href=" {{ url('posts/'.$post->id.'/edit') }} ">Editar</a> | 
             <form method="post" action=" {{url('/posts/'.$post->id) }} ">
             {{ csrf_field() }}
@@ -20,3 +28,7 @@
     @endforeach
     </tbody>
 </table>
+
+
+</div>
+@endsection

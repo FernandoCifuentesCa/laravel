@@ -1,3 +1,11 @@
+@extends('layouts.app')
+
+
+@section('content')
+
+<div class="container">
+
+
 create a new post
 @if(count($errors)>0)
 <div class="alert alert-danger" role="alert">
@@ -19,3 +27,6 @@ create a new post
 <input type="submit" value="Agregar">
 
 </form>
+
+</div>
+@endsection

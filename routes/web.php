@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
     
 });
 Route::resource('posts', 'PostsController');
 Route::resource('comments', 'CommentsController');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -1,8 +1,17 @@
+@extends('layouts.app')
+
+
+@section('content')
+
+<div class="container">
+
+<a class="nav-link" href="{{ route('comments.create') }}">{{ __('Add a Comment') }}</a>
+
 <table class="table table-dark">
     <thead class="thead-dark">
         <tr>
-            <th>Post ID</th>
-            <th>content</th>
+            <th style="text-align: center">Post_ID</th>
+            <th style="text-align: center">Comment</th>
         </tr>
     </thead>
 
@@ -21,3 +30,6 @@
     @endforeach
     </tbody>
 </table>
+
+</div>
+@endsection
